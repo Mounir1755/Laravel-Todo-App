@@ -5,11 +5,11 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
-Route::get('/', [taskController::class, 'index'])->name('home');
+Route::get('/', fn() => view('home'))->name('home');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::post('/task/store', [taskController::class, 'store'])->name('task.store');
+
+Route::get('dashboard', [taskController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

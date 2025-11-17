@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\taskModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class taskController extends Controller
 {
@@ -19,10 +20,12 @@ class taskController extends Controller
      */
     public function index()
     {
-        $tasks = $this->taskModel->GetAllTasks();
+        $userId = Auth::id();
+        
+        $tasks = $this->taskModel->GetAllTasksById($userId);
         
         // dd($tasks);
-        return view('home', [
+        return view('dashboard', [
             'tasks' => $tasks
         ]);
     }
@@ -40,7 +43,16 @@ class taskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string'
+        ]);
+
+        $data['userId'] = Auth::id();
+
+        $this->taskModel->CreateNewTask($data);
+        
+        return redirect()->route('dashboard');
     }
 
     /**
