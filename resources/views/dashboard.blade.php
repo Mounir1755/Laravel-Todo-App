@@ -9,19 +9,10 @@
             @endif
             <div class="container">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-4">
                         <h6>NEW TASK</h6>
                         <form method="POST" action="{{ route('task.store') }}">
                             @csrf
-
-                            @if($categories)
-                                <select>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->categoryTitle}}</option>
-                                    @endforeach
-                                </select>
-                            @endif
-
                             <div class="mb-3">
                                 <label for="title" class="form-label">title</label>
                                 <input type="text" name="title" id="title" class="form-control">
@@ -37,7 +28,7 @@
                             </button>
                         </form>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <h6>NEW CATEGORY</h6>
                         <form method="POST" action="{{ route('category.store') }}">
                             @csrf
@@ -56,22 +47,60 @@
                             </button>
                         </form>
                     </div>
+                    <div class="col-4">
+                        <h6>LINK TASK TO CATEGORY</h6>
+                        <form method="POST" action="{{ route('task.addTaskToCategory') }}">
+                            @csrf
+
+                            <div class="mb-3">
+                                @if( $categories )
+                                    <label for="categoryId" class="form-label">category</label>
+                                    <select class="form-select" name="categoryId" id="categoryId">
+                                        @foreach ( $categories as $category )
+                                            <option value="{{ $category->id }}">
+                                                {{ $category->categoryTitle }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                @else 
+                                    Make a category first
+                                @endif
+                            </div>
+
+                            <div class="mb-3">
+                                @if( $tasks )
+                                    <label for="taskId" class="form-label">task</label>
+                                    <select class="form-select" name="taskId" id="taskId">
+                                        @foreach ( $tasks as $task )
+                                            <option value="{{ $task->id }}">
+                                                {{ $task->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                @else
+                                    Make a task first
+                                @endif                        
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                    MAKE
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-
             <div class="container">
                 <div class="row">
                     <div class="overflow-y-auto" style="max-height: 70vh;">
-                        @forelse ($tasks as $task)
-                            <div class="col-12 d-flex border p-3 mt-3">
-                                
+                        @forelse ( $tasks as $task )
+                            <div class="col-12 d-flex border rounded p-3 mt-3">
                                 <div>
                                     <h5>Task: {{ $task->title }}</h5>
                                     <p class="mb-0">Description: {{ $task->description }}</p>
+                                    <a href="{{ route('task.edit', $task->id)}}" class="mt-auto">edit</a>
                                 </div>
                                 <div class="ms-auto d-flex justify-content-center align-items-center">
-                                    @if ( $task->done == 0)
+                                    @if ( $task->done == 0 )
                                          <div class="border p-1 rounded-pill bg-danger text-white" style="--bs-bg-opacity: .9; --bs-border-color: black;">
                                             Nog maken
                                         </div>
@@ -79,7 +108,7 @@
                                         <div class="border p-1 rounded-pill bg-succes text-white" style="--bs-bg-opacity: .5; --bs-border-color: black;">
                                             AF!
                                         </div>
-                                    @endif
+                                    @endif                             
                                 </div>
                             </div>
                         @empty

@@ -9,7 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 class taskModel extends Model
 {
     public function GetAllTasksById($userId) {
-        $result = DB::table('tasks')->get()->where('userId', '=', $userId);
+        $result = DB::table('tasks')
+                        ->get()
+                        ->where('userId', '=', $userId);
+
+        return $result;
+    }
+
+    public function GetTaskInfoById($id) {
+        $result = DB::table('tasks')
+                        ->get()
+                        ->where('id', '=', $id)
+                        ->first();
 
         return $result;
     }
@@ -23,4 +34,13 @@ class taskModel extends Model
             ]
         ]);
     }    
+
+    public function AddTaskToCategory($data) {
+        DB::table('category_task')->insert([
+            [
+                 'categoryId' => $data['categoryId']
+                ,'taskId'     => $data['taskId']
+            ]
+        ]);
+    }
 }

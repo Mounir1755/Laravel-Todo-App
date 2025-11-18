@@ -16,7 +16,7 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     
                     @forelse ($categories as $category)
-                        <flux:navlist.item>{{$category->categoryTitle}}<br>{{$category->categoryDescription}}</flux:navlist.item>
+                        <flux:navlist.item :href="route('category.show', $category->id)">{{$category->categoryTitle}}<br>{{$category->categoryDescription}}</flux:navlist.item>
                     @empty
                         make a category
                     @endforelse

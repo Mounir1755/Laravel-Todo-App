@@ -52,9 +52,15 @@ class categoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(categoryModel $categoryModel)
+    public function show($Id)
     {
-        //
+        $categoryInfo = $this->categoryModel->GetAllCategoryInfoById($Id);
+        $categoryTasks = $this->categoryModel->GetAllTasksByCategoryId($Id);
+
+        return view('category.show', [
+             'categoryInfo' => $categoryInfo
+            ,'categoryTasks' => $categoryTasks
+        ]);
     }
 
     /**

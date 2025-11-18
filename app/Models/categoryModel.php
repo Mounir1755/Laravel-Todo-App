@@ -13,6 +13,31 @@ class categoryModel extends Model
         return $result;
     }
 
+    public function GetAllCategoryInfoById($Id) {
+        $result = DB::table('categories')
+                        ->get()
+                        ->where('id', '=', $Id)
+                        ->first();
+
+        return $result;
+    }
+
+    public function GetAllTasksByCategoryId($Id) {
+        $result = DB::table('category_task as ct')
+            ->join('categories as c', 'ct.categoryId', '=', 'c.id')
+            ->join('tasks as t', 'ct.taskId', '=', 't.id')
+            ->where('ct.categoryId', $Id)
+            ->select(
+                't.*',
+                'c.categoryTitle',
+                'c.categoryDescription'
+            )
+            ->get();
+
+        return $result;
+    }
+
+
     public function CreateNewCategory($data) {
         DB::table('categories')->insert([
             [

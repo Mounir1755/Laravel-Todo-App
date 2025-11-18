@@ -11,8 +11,14 @@ Route::get('dashboard', [dashboardController::class, 'index'])->middleware(['aut
 
 Route::get('/', fn() => view('home'))->name('home');
 
-Route::post('/task/store', [taskController::class, 'store'])->name('task.store');
+Route::get('/task/{id}/edit', [taskController::class, 'edit'])->name('task.edit');
+Route::put('task/{id}', [taskController::class, 'update'])->name('task.update');
 
+Route::post('/task/store', [taskController::class, 'store'])->name('task.store');
+Route::post('/task/addTaskToCategory',  [taskController::class, 'addTaskToCategory'])->name('task.addTaskToCategory');
+
+
+Route::get('/category/{id}/show', [categoryController::class, 'show'])->name('category.show');
 Route::post('/category/store', [categoryController::class, 'store'])->name('category.store');
 
 Route::middleware(['auth'])->group(function () {

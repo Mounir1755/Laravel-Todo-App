@@ -45,15 +45,35 @@ class taskController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            // fix pivot table 
-            'title' => 'required|string',
+            'categoryId'  => 'nullable',
+            'title'       => 'required|string',
             'description' => 'required|string'
         ]);
 
         $data['userId'] = Auth::id();
 
+        // if ($data['categoryId']) {
+        //     $this->taskModel->AddTaskToCategory($data['categoryId']);
+        // }
+
         $this->taskModel->CreateNewTask($data);
         
+        
+        return redirect()->route('dashboard');
+    }
+
+    /**
+     * Link a task to a category
+     */
+    public function addTaskToCategory(Request $request)
+    {
+        $data = $request->validate([
+             'categoryId' => 'required'
+            ,'taskId'     => 'required'
+        ]);
+
+        $this->taskModel->AddTaskToCategory($data);
+
         return redirect()->route('dashboard');
     }
 
@@ -68,9 +88,13 @@ class taskController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $oldData = $this->taskModel->GetTaskinfoById($id);
+        // dd($oldData);
+        return view('task.edit', [
+            'oldData' => $oldData
+        ]);
     }
 
     /**
@@ -78,7 +102,10 @@ class taskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $newData = $request->validate([
+             'title'        => 'required|string'
+            ,'description'  => 'required|string'
+        ]);
     }
 
     /**
