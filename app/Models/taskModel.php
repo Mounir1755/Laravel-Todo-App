@@ -27,20 +27,28 @@ class taskModel extends Model
 
     public function CreateNewTask($data) {
         DB::table('tasks')->insert([
-            [
                  'userId'       => $data['userId']
                 ,'title'        => $data['title']
                 ,'description'  => $data['description']
-            ]
         ]);
-    }    
+    } 
+    
+    public function UpdateTask($id, $newData) {
+        DB::table('tasks')
+                ->where('id', $id)
+                ->update(
+                    [
+                        
+                             'title'        => $newData['title']
+                            ,'description'  => $newData['description']
+                    ]
+                );
+    }   
 
     public function AddTaskToCategory($data) {
         DB::table('category_task')->insert([
-            [
                  'categoryId' => $data['categoryId']
                 ,'taskId'     => $data['taskId']
-            ]
         ]);
     }
 }

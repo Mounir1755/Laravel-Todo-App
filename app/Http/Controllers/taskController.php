@@ -100,12 +100,16 @@ class taskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $newData = $request->validate([
              'title'        => 'required|string'
             ,'description'  => 'required|string'
         ]);
+
+        $this->taskModel->UpdateTask($id, $newData);
+
+        return redirect()->route('dashboard');
     }
 
     /**

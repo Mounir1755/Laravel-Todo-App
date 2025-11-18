@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <form action="{{ route('task.update', $oldData->id)}}">
+                <form action="{{ route('task.update', $oldData->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <h6>EDIT:{{ $oldData->title }}</h6>

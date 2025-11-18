@@ -40,11 +40,9 @@ class categoryModel extends Model
 
     public function CreateNewCategory($data) {
         DB::table('categories')->insert([
-            [
                  'userId'               => $data['userId']
                 ,'categoryTitle'        => $data['categoryTitle']
                 ,'categoryDescription'  => $data['categoryDescription']
-            ]
         ]);
     }
 }
