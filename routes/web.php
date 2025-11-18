@@ -1,15 +1,19 @@
 <?php
 
+use App\Http\Controllers\categoryController;
+use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\taskController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
+Route::get('dashboard', [dashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::get('/', fn() => view('home'))->name('home');
 
 Route::post('/task/store', [taskController::class, 'store'])->name('task.store');
 
-Route::get('dashboard', [taskController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::post('/category/store', [categoryController::class, 'store'])->name('category.store');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

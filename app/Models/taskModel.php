@@ -22,6 +22,5 @@ class taskModel extends Model
                 ,'description'  => $data['description']
             ]
         ]);
-    }
-    
+    }    
 }

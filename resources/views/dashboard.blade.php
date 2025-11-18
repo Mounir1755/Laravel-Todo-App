@@ -7,22 +7,58 @@
                     <button type="button" class="btn-close" aria-label="sluiten" data-bs-dismiss="alert"></button>
                 </div>
             @endif
-            <form method="POST" action="{{ route('task.store') }}">
-                @csrf
-                <div class="d-flex">
-                    <label for="title">title</label>
-                    <input type="text" name="title" id="title">
-                </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <h6>NEW TASK</h6>
+                        <form method="POST" action="{{ route('task.store') }}">
+                            @csrf
 
-                <div class="">
-                    <label for="description">description</label>
-                    <input type="text" name="description" id="description">
-                </div>
+                            @if($categories)
+                                <select>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->categoryTitle}}</option>
+                                    @endforeach
+                                </select>
+                            @endif
 
-                <button type="submit" class="btn btn-primary">
-                    MAKE
-                </button>
-            </form>
+                            <div class="mb-3">
+                                <label for="title" class="form-label">title</label>
+                                <input type="text" name="title" id="title" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">description</label>
+                                <input type="text" name="description" id="description" class="form-control">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                MAKE
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-6">
+                        <h6>NEW CATEGORY</h6>
+                        <form method="POST" action="{{ route('category.store') }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="categoryTitle" class="form-label">category title</label>
+                                <input type="text" name="categoryTitle" id="categoryTitle" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="categoryDescription" class="form-label">category description</label>
+                                <input type="text" name="categoryDescription" id="categoryDescription" class="form-control">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                MAKE
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="container">
                 <div class="row">

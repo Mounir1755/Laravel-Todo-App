@@ -3,31 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\taskModel;
+use App\Models\categoryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 
-class taskController extends Controller
+class dashboardController extends Controller
 {
 
     private $taskModel;
+    private $categoryModel;
 
     public function __construct()
     {
-        $this->taskModel = new taskModel;
+        $this->taskModel = new taskModel();
+        $this->categoryModel = new categoryModel();
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $userId = Auth::id();
-        
-        $tasks = $this->taskModel->GetAllTasksById($userId);
-        
-        // dd($tasks);
+
+        $tasks      = $this->taskModel->GetAllTasksById($userId);
+        $categories = $this->categoryModel->GetAllCategoriesById($userId);
+
         return view('dashboard', [
-            'tasks' => $tasks
+            'tasks'      => $tasks,
+            'categories' => $categories
         ]);
     }
 
@@ -44,17 +48,7 @@ class taskController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            // fix pivot table 
-            'title' => 'required|string',
-            'description' => 'required|string'
-        ]);
-
-        $data['userId'] = Auth::id();
-
-        $this->taskModel->CreateNewTask($data);
-        
-        return redirect()->route('dashboard');
+        //
     }
 
     /**

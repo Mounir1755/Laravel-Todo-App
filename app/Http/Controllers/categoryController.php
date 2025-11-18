@@ -2,33 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\taskModel;
 use Illuminate\Http\Request;
+use App\Models\categoryModel;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 
-class taskController extends Controller
+class categoryController extends Controller
 {
 
-    private $taskModel;
+    private $categoryModel;
 
     public function __construct()
     {
-        $this->taskModel = new taskModel;
+        $this->categoryModel = new categoryModel();
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $userId = Auth::id();
-        
-        $tasks = $this->taskModel->GetAllTasksById($userId);
-        
-        // dd($tasks);
-        return view('dashboard', [
-            'tasks' => $tasks
-        ]);
+        //
     }
 
     /**
@@ -45,22 +38,21 @@ class taskController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            // fix pivot table 
-            'title' => 'required|string',
-            'description' => 'required|string'
+            'categoryTitle' => 'required|string',
+            'categoryDescription' => 'required|string'
         ]);
 
         $data['userId'] = Auth::id();
-
-        $this->taskModel->CreateNewTask($data);
         
+        $this->categoryModel->CreateNewCategory($data);
+
         return redirect()->route('dashboard');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(categoryModel $categoryModel)
     {
         //
     }
@@ -68,7 +60,7 @@ class taskController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(categoryModel $categoryModel)
     {
         //
     }
@@ -76,7 +68,7 @@ class taskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, categoryModel $categoryModel)
     {
         //
     }
@@ -84,7 +76,7 @@ class taskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(categoryModel $categoryModel)
     {
         //
     }
