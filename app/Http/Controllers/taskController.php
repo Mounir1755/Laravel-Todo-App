@@ -24,10 +24,31 @@ class taskController extends Controller
         $userId = Auth::id();
         
         $tasks = $this->taskModel->GetAllTasksById($userId);
-        
+
         // dd($tasks);
         return view('dashboard', [
             'tasks' => $tasks
+        ]);
+    }
+
+    public function trashbin()
+    {
+        $userId = Auth::id();
+
+        $deletedtasks = $this->taskModel->GetAllTasksById($userId);
+
+        $trashbin = [];
+
+        foreach ($deletedtasks as $task) {
+            if ($task->isActive == 0) {
+                $trashbin[] = $task;
+            }
+        }
+
+        // dd($trashbin);
+
+        return view('trashbin', [
+            'trashbin' => $trashbin
         ]);
     }
 
@@ -112,11 +133,20 @@ class taskController extends Controller
         return redirect()->route('dashboard');
     }
 
+    public function softDelete($id)
+    {
+        $this->taskModel->SoftDelete($id);
+
+        return redirect()->route('dashboard');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $this->taskModel->DeleteTask($id);
+
+        return redirect()->route('trashbin');
     }
 }

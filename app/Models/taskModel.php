@@ -32,6 +32,14 @@ class taskModel extends Model
                 ,'description'  => $data['description']
         ]);
     } 
+
+    public function SoftDelete($id) {
+        DB::table('tasks')->where('id', $id)->update(['isActive' => 0]);
+    }
+
+    public function DeleteTask($id) {
+        DB::table('tasks')->where('id', $id)->delete();
+    }
     
     public function UpdateTask($id, $newData) {
         DB::table('tasks')
