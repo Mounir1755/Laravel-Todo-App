@@ -132,7 +132,20 @@ class taskController extends Controller
 
         return redirect()->route('dashboard');
     }
+    
+    /**
+     * Mark task as done.
+     */
+    public function done($id)
+    {
+        $this->taskModel->MarkTaskAsDone($id);
 
+        return redirect()->route('dashboard');
+    }
+
+    /**
+     * Soft delete task.
+     */
     public function softDelete($id)
     {
         $this->taskModel->SoftDelete($id);

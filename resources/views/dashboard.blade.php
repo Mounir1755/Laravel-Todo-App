@@ -1,5 +1,6 @@
 <x-layouts.app>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <h1 class="text-red-100">test kleur</h1>
             @if (session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ session('error') }}
@@ -13,8 +14,8 @@
                         <form method="POST" action="{{ route('task.store') }}">
                             @csrf
                             <div class="mb-3">
-                                <label for="title" class="form-label">title</label>
-                                <input type="text" name="title" id="title" class="form-control">
+                                <label for="title" class="text-red-950">title</label>
+                                <input type="text" name="title" id="title" class="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
                             </div>
 
                             <div class="mb-3">
@@ -98,6 +99,16 @@
                                         <h5>Task: {{ $task->title }}</h5>
                                         <p class="mb-0">Description: {{ $task->description }}</p>
                                         <div class="d-flex mt-auto">
+
+                                            <form action=""></form>
+                                            <form action="{{ route('task.done', $task->id )}}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit">
+                                                    mark as done
+                                                </button>
+                                            </form>
+
                                             <a href="{{ route('task.edit', $task->id)}}">edit</a>
 
                                             <form action="{{ route('task.softdelete', $task->id)}}" 
@@ -112,12 +123,12 @@
                                     </div>
 
                                     <div class="ms-auto d-flex justify-content-center align-items-center">
-                                        @if ( $task->done == 0 )
+                                        @if ( $task->done === 0 )
                                             <div class="border p-1 rounded-pill bg-danger text-white" style="--bs-bg-opacity: .9; --bs-border-color: black;">
                                                 Nog maken
                                             </div>
                                         @else
-                                            <div class="border p-1 rounded-pill bg-succes text-white" style="--bs-bg-opacity: .5; --bs-border-color: black;">
+                                            <div class="border p-1 rounded-pill bg-success text-white" style="--bs-bg-opacity: .5; --bs-border-color: black;">
                                                 AF!
                                             </div>
                                         @endif                             
@@ -132,5 +143,5 @@
                     </div>
                 </div>
             </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </x-layouts.app>

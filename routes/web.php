@@ -12,11 +12,12 @@ Route::get('dashboard', [dashboardController::class, 'index'])->middleware(['aut
 Route::get('/', fn() => view('home'))->name('home');
 
 Route::post('/task/store', [taskController::class, 'store'])->name('task.store');
+Route::put('/task/{id}/done', [taskController::class, 'done'])->name('task.done');
 Route::get('/task/{id}/edit', [taskController::class, 'edit'])->name('task.edit');
-Route::put('/task/{id}', [taskController::class, 'update'])->name('task.update');
+Route::put('/task/{id}/update', [taskController::class, 'update'])->name('task.update');
 
 Route::delete('/trashbin/{id}', [taskController::class, 'destroy'])->name('trashbin.destroy');
-Route::put('/task/{id}', [taskController::class, 'softdelete'])->name('task.softdelete');
+Route::put('/task/{id}/softdelete', [taskController::class, 'softdelete'])->name('task.softdelete');
 Route::get('trashbin', [taskController::class, 'trashbin'])->name('trashbin');
 
 

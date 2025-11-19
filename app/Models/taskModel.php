@@ -41,6 +41,10 @@ class taskModel extends Model
         DB::table('category_task')->where('taskId', $id)->delete();
         DB::table('tasks')->where('id', $id)->delete();
     }
+
+    public function MarkTaskAsDone($id) {
+        DB::table('tasks')->where('id', $id)->update(['Done' => 1]);
+    }
     
     public function UpdateTask($id, $newData) {
         DB::table('tasks')
