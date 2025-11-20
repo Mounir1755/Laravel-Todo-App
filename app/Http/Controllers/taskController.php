@@ -150,6 +150,13 @@ class taskController extends Controller
         return redirect()->route('dashboard');
     }
 
+    public function retreive($id)
+    {
+        $this->taskModel->RetreiveTask($id);
+
+        return redirect()->route('dashboard');
+    }
+
     /**
      * Remove the specified resource from storage.
      */

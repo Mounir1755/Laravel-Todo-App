@@ -1,48 +1,63 @@
 <x-layouts.app>    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        <div class="container">
-            <div class="row">
-                <h5>{{ $categoryInfo->categoryTitle }}</h5>
-                <p>{{ $categoryInfo->categoryDescription}}</p>
-                <div class="overflow-y-auto" style="max-height: 70vh;">
-                    @forelse ( $categoryTasks as $task )
-                        @if ( $task->isActive === 1)
-                            <div class="col-12 d-flex border rounded p-3 mt-3">
-                                <div>
-                                    <h5>Task: {{ $task->title }}</h5>
-                                    <p class="mb-0">Description: {{ $task->description }}</p>
-                                    <div class="d-flex mt-auto">
-                                        <a href="{{ route('task.edit', $task->id)}}">edit</a>
-                                        <form action="{{ route('task.softdelete', $task->id)}}" 
-                                            method="POST" 
-                                            onsubmit="return confirm('are you sure you want to do this?')"
-                                        >
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit">delete</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="ms-auto d-flex justify-content-center align-items-center">
-                                    @if ( $task->done == 0 )
-                                        <div class="border p-1 rounded-pill bg-danger text-white" style="--bs-bg-opacity: .9; --bs-border-color: black;">
-                                            Nog maken
-                                        </div>
-                                    @else
-                                        <div class="border p-1 rounded-pill bg-succes text-white" style="--bs-bg-opacity: .5; --bs-border-color: black;">
-                                            AF!
-                                        </div>
-                                    @endif                             
-                                </div>
+    <h6>{{ $categoryInfo->categoryTitle }}</h6>
+    <h6>{{ $categoryInfo->categoryDescription }}</h6>
+    <div class="overflow-y-auto p-4" style="max-height: 70vh;">
+        @forelse ( $categoryTasks as $task )
+            @if ( $task->isActive === 1)
+                <div class="border border-sky-950 rounded-lg mb-3 grid grid-cols-2 gap-6 p-2 shadow-xl">
+                    <div>
+                        <h5 class="{{ $task->done ? ' tracking-wide font-bold decoration-wavy line-through decoration-red-600 decoration-1' : ' tracking-wide font-bold' }}">Task: {{ $task->title }}</h5>
+                        <p class="text-xs text-gray-400">Description: {{ $task->description }}</p>
+                        <div class="flex items-center gap-3">
+                            <a href="{{ route('task.edit', $task->id)}}">
+                                <i class="bi bi-pen cursor-pointer"></i>
+                            </a>
+
+                            <form action="{{ route('task.softdelete', $task->id)}}" 
+                                method="POST" 
+                                onsubmit="return confirm('are you sure you want to do this?')"
+                                class="inline"
+                            >
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="inline-flex items-center">
+                                    <i class="bi bi-trash cursor-pointer"></i>
+                                </button>
+                            </form>
+
+                            <form action="{{ route('task.done', $task->id )}}" method="POST">
+                                @csrf
+                                @method('PUT')
+
+                                <input type="hidden" name="done" value="0">
+
+                                
+                                <input type="checkbox"
+                                    name="done"
+                                    value="1"
+                                    onchange="this.form.submit()"
+                                    {{ $task->done ? 'checked' : '' }}>
+                                <label for="done">Mark as done</label>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="ms-auto content-center">
+                        @if ( $task->done == 0 )
+                            <div class="border border-red-900 rounded-full text-xs p-1 bg-red-800 font-bold shadow-lg">
+                                To-do
                             </div>
                         @else
-                            <div></div>
-                        @endif
-                    @empty
-                        <p>Niks gevonden :(</p>
-                    @endforelse
+                            <div class="border border-green-900 rounded-full text-xs p-1 bg-green-800 font-bold shadow-lg">
+                                Done
+                            </div>
+                        @endif                             
+                    </div>
                 </div>
-            </div>
-        </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+            @else
+                <div></div>
+            @endif
+        @empty
+            <p>Niks gevonden :(</p>
+        @endforelse
+    </div>
 </x-layouts.app>

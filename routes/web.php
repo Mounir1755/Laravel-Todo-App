@@ -17,6 +17,7 @@ Route::get('/task/{id}/edit', [taskController::class, 'edit'])->name('task.edit'
 Route::put('/task/{id}/update', [taskController::class, 'update'])->name('task.update');
 
 Route::delete('/trashbin/{id}', [taskController::class, 'destroy'])->name('trashbin.destroy');
+Route::put('/trashbin/{id}/retreive', [taskController::class, 'retreive'])->name('trashbin.retreive');
 Route::put('/task/{id}/softdelete', [taskController::class, 'softdelete'])->name('task.softdelete');
 Route::get('trashbin', [taskController::class, 'trashbin'])->name('trashbin');
 

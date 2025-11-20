@@ -37,6 +37,10 @@ class taskModel extends Model
         DB::table('tasks')->where('id', $id)->update(['isActive' => 0]);
     }
 
+    public function RetreiveTask($id) {
+        DB::table('tasks')->where('id', $id)->update(['isActive' => 1]);
+    }
+
     public function DeleteTask($id) {
         DB::table('category_task')->where('taskId', $id)->delete();
         DB::table('tasks')->where('id', $id)->delete();
