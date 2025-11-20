@@ -1,147 +1,131 @@
 <x-layouts.app>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <h1 class="text-red-100">test kleur</h1>
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" aria-label="sluiten" data-bs-dismiss="alert"></button>
+    <div class="grid grid-cols-2 gap-6 p-4">
+        <!-- LEFT -->
+        <div>
+            <h6 class="mb-2">NEW CATEGORY</h6>
+            <form method="POST" action="{{ route('category.store') }}" class="space-y-4">
+                @csrf
+
+                <flux:field>
+                    <flux:label for="categoryTitle">category title</flux:label>
+                    <flux:input type="text" name="categoryTitle" id="categoryTitle" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label for="categoryDescription">category description</flux:label>
+                    <flux:input type="text" name="categoryDescription" id="categoryDescription" />
+                </flux:field>
+
+                <flux:button type="submit">MAKE</flux:button>
+            </form>
+        </div>
+
+        <!-- RIGHT -->
+        <div>
+            <h6 class="mb-2">LINK TASK TO CATEGORY</h6>
+            <form method="POST" action="{{ route('task.addTaskToCategory') }}" class="space-y-4">
+                @csrf
+
+                <flux:field>
+                    <flux:label for="categoryId">category</flux:label>
+                    <flux:select name="categoryId" id="categoryId">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->categoryTitle }}</option>
+                        @endforeach
+                    </flux:select>
+                </flux:field>
+
+                <flux:field>
+                    <flux:label for="taskId">task</flux:label>
+                    <flux:select name="taskId" id="taskId">
+                        @foreach ($tasks as $task)
+                            <option value="{{ $task->id }}">{{ $task->title }}</option>
+                        @endforeach
+                    </flux:select>
+                </flux:field>
+
+                <flux:button type="submit">MAKE</flux:button>
+            </form>
+        </div>
+    </div>
+
+    <h6 class="pl-4">Make a new task.</h6>
+    <form method="POST" action="{{ route('task.store') }}" class="grid grid-cols-2 gap-6 p-4">
+        @csrf
+
+        <flux:field>
+            <flux:label for="title">title</flux:label>
+            <flux:input type="text" name="title" id="title"/>
+        </flux:field>
+
+        <flux:field>
+            <flux:label for="description">description</flux:label>
+            <flux:input type="text" name="description" id="description"/>
+        </flux:field>
+
+        <flux:button type="submit" class="col-span-2">
+            MAKE
+        </flux:button>
+    </form>
+           
+    <div class="overflow-y-auto p-4" style="max-height: 70vh;">
+        @forelse ( $tasks as $task )
+            @if ( $task->isActive === 1)
+                <div class="border border-sky-950 rounded-lg mb-3 grid grid-cols-2 gap-6 p-2">
+                    <div>
+                        <h5 class="{{ $task->done ? ' tracking-wide font-bold decoration-wavy line-through decoration-red-600 decoration-1' : ' tracking-wide font-bold' }}">Task: {{ $task->title }}</h5>
+                        <p class="text-xs text-gray-400">Description: {{ $task->description }}</p>
+                        <div class="flex items-center gap-3">
+                            <a href="{{ route('task.edit', $task->id)}}">
+                                <i class="bi bi-pen cursor-pointer"></i>
+                            </a>
+
+                            <form action="{{ route('task.softdelete', $task->id)}}" 
+                                method="POST" 
+                                onsubmit="return confirm('are you sure you want to do this?')"
+                                class="inline"
+                            >
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="inline-flex items-center">
+                                    <i class="bi bi-trash cursor-pointer"></i>
+                                </button>
+                            </form>
+
+                            <form action="{{ route('task.done', $task->id )}}" method="POST">
+                                @csrf
+                                @method('PUT')
+
+                                <input type="hidden" name="done" value="0">
+
+                                
+                                <input type="checkbox"
+                                    name="done"
+                                    value="1"
+                                    onchange="this.form.submit()"
+                                    {{ $task->done ? 'checked' : '' }}>
+                                <label for="done">Mark as done</label>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="ms-auto content-center">
+                        @if ( $task->done == 0 )
+                            <div class="border border-red-900 rounded-full text-xs p-1 bg-red-800 font-bold">
+                                To-do
+                            </div>
+                        @else
+                            <div class="border border-green-900 rounded-full text-xs p-1 bg-green-800 font-bold">
+                                Done
+                            </div>
+                        @endif                             
+                    </div>
                 </div>
+            @else
+                <div></div>
             @endif
-            <div class="container">
-                <div class="row">
-                    <div class="col-4">
-                        <h6>NEW TASK</h6>
-                        <form method="POST" action="{{ route('task.store') }}">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="title" class="text-red-950">title</label>
-                                <input type="text" name="title" id="title" class="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
-                            </div>
+        @empty
+            <p>Niks gevonden :(</p>
+        @endforelse
+    </div>
 
-                            <div class="mb-3">
-                                <label for="description" class="form-label">description</label>
-                                <input type="text" name="description" id="description" class="form-control">
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">
-                                MAKE
-                            </button>
-                        </form>
-                    </div>
-                    <div class="col-4">
-                        <h6>NEW CATEGORY</h6>
-                        <form method="POST" action="{{ route('category.store') }}">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="categoryTitle" class="form-label">category title</label>
-                                <input type="text" name="categoryTitle" id="categoryTitle" class="form-control">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="categoryDescription" class="form-label">category description</label>
-                                <input type="text" name="categoryDescription" id="categoryDescription" class="form-control">
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">
-                                MAKE
-                            </button>
-                        </form>
-                    </div>
-                    <div class="col-4">
-                        <h6>LINK TASK TO CATEGORY</h6>
-                        <form method="POST" action="{{ route('task.addTaskToCategory') }}">
-                            @csrf
-
-                            <div class="mb-3">
-                                @if( $categories )
-                                    <label for="categoryId" class="form-label">category</label>
-                                    <select class="form-select" name="categoryId" id="categoryId">
-                                        @foreach ( $categories as $category )
-                                            <option value="{{ $category->id }}">
-                                                {{ $category->categoryTitle }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                @else 
-                                    Make a category first
-                                @endif
-                            </div>
-
-                            <div class="mb-3">
-                                @if( $tasks )
-                                    <label for="taskId" class="form-label">task</label>
-                                    <select class="form-select" name="taskId" id="taskId">
-                                        @foreach ( $tasks as $task )
-                                            <option value="{{ $task->id }}">
-                                                {{ $task->title }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                @else
-                                    Make a task first
-                                @endif                        
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">
-                                    MAKE
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="overflow-y-auto" style="max-height: 70vh;">
-                        @forelse ( $tasks as $task )
-                            @if ( $task->isActive === 1)
-                                <div class="col-12 d-flex border rounded p-3 mt-3">
-                                    <div>
-                                        <h5>Task: {{ $task->title }}</h5>
-                                        <p class="mb-0">Description: {{ $task->description }}</p>
-                                        <div class="d-flex mt-auto">
-
-                                            <form action=""></form>
-                                            <form action="{{ route('task.done', $task->id )}}" method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit">
-                                                    mark as done
-                                                </button>
-                                            </form>
-
-                                            <a href="{{ route('task.edit', $task->id)}}">edit</a>
-
-                                            <form action="{{ route('task.softdelete', $task->id)}}" 
-                                                method="POST" 
-                                                onsubmit="return confirm('are you sure you want to do this?')"
-                                            >
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit">delete</button>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                    <div class="ms-auto d-flex justify-content-center align-items-center">
-                                        @if ( $task->done === 0 )
-                                            <div class="border p-1 rounded-pill bg-danger text-white" style="--bs-bg-opacity: .9; --bs-border-color: black;">
-                                                Nog maken
-                                            </div>
-                                        @else
-                                            <div class="border p-1 rounded-pill bg-success text-white" style="--bs-bg-opacity: .5; --bs-border-color: black;">
-                                                AF!
-                                            </div>
-                                        @endif                             
-                                    </div>
-                                </div>
-                            @else
-                                <div></div>
-                            @endif
-                        @empty
-                            <p>Niks gevonden :(</p>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </x-layouts.app>

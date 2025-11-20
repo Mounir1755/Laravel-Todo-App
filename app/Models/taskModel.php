@@ -58,6 +58,25 @@ class taskModel extends Model
                 );
     }   
 
+    public function MarkAsDone($id)
+    {
+        $checkIfDone = DB::table('tasks')
+                            ->where('id', $id)
+                            ->value('done'); // < pakt alleen de waarde niet de hele kolom
+
+        if ($checkIfDone == 0) {
+            DB::table('tasks')
+                ->where('id', $id)
+                ->update(['done' => 1]);
+        } elseif ($checkIfDone == 1) {
+            DB::table('tasks')
+                ->where('id', $id)
+                ->update(['done' => 0]);
+        } else {
+            return 'babash';
+        }
+    }
+
     public function AddTaskToCategory($data) {
         DB::table('category_task')->insert([
                  'categoryId' => $data['categoryId']
