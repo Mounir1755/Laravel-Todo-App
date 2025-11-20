@@ -1,7 +1,7 @@
 # Laravel-Todo-App
 A Laravel application made to track your tasks
 
-##Week 1:
+# Week 1:
  <ul>
      <li>add task</li>
      <li>edit task</li>
