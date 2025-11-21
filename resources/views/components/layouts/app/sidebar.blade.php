@@ -58,8 +58,10 @@
 
                     @forelse ($categories as $category)
                         <flux:navlist.item :href="route('category.show', $category->id)">
-                            <div class="text-white">{{$category->categoryTitle}}</div>
-                            <div class="text-[10px] mt-[4px]">{{$category->categoryDescription}}</div>
+                            <div class="text-white">
+                                {{$category->categoryTitle}} <br>
+                                <span class="text-gray-300 text-[9px]">{{$category->categoryDescription}}</span>
+                            </div>
                         </flux:navlist.item>
                     @empty
                         make a category
