@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teams', function (Blueprint $table) {
+        Schema::create('team_user', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable(false);
-            $table->string('description')->nullable(true);
+            $table->foreignId('teamId')->references('id')->on('teams');
+            $table->foreignId('userId')->references('id')->on('users');
+            // $table->string('role'); <- will be added later
             $table->boolean('isActive')->default(1);
             $table->string('remark')->nullable()->default(Null);
             $table->dateTime('dateMade', 6)->useCurrent();
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teams');
+        //
     }
 };
