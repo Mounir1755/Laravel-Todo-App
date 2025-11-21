@@ -16,6 +16,11 @@
                 <flux:navlist.group :heading="__('Menu')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="trash" :href="route('trashbin')">Trashbin</flux:navlist.item>
+                    <flux:sidebar.group expandable icon="user-group" heading="Teams" class="grid">
+                        <flux:sidebar.item href="#">team</flux:sidebar.item>
+                        <flux:sidebar.item href="#">team</flux:sidebar.item>
+                        <flux:sidebar.item href="#">team</flux:sidebar.item>
+                    </flux:sidebar.group>
                 </flux:navlist.group>
                 {{-- alpine is used for this --}}
                 <flux:navlist.group class="grid" x-data="{ openForm: false }">
