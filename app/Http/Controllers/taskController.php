@@ -79,8 +79,8 @@ class taskController extends Controller
 
         $this->taskModel->CreateNewTask($data);
         
-        
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')
+                         ->with('SuccessCreateTask', 'New task made!');
     }
 
     /**
@@ -95,7 +95,8 @@ class taskController extends Controller
 
         $this->taskModel->AddTaskToCategory($data);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')
+                         ->with('SuccesLinkTask', 'Task linked!');
     }
 
     /**

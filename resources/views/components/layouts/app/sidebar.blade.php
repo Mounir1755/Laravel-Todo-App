@@ -16,12 +16,51 @@
                 <flux:navlist.group :heading="__('Menu')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="trash" :href="route('trashbin')">Trashbin</flux:navlist.item>
-                    
-
                 </flux:navlist.group>
-                <flux:navlist.group :heading="__('Categories')" class="grid">
+                {{-- alpine is used for this --}}
+                <flux:navlist.group class="grid" x-data="{ openForm: false }">
+                    <x-slot name="heading">
+                        <div class="flex items-center justify-between">
+                            <span>Categories</span>
+
+                            <button 
+                                @click="openForm = !openForm"
+                                class="text-xl text-grey-400"
+                            >
+                                +
+                            </button>
+                        </div>
+                    </x-slot>
+
+                    @if (session('SuccessCreateCategory'))
+                        <div class="p-1 border border-green-400 bg-green-800 rounded-lg mt-1" role="alert">
+                            <h6 class="font-bold">{{ session('SuccessCreateCategory') }}</h6>
+                        </div>
+                        <meta http-equiv="refresh" content="2;url={{ route('dashboard') }}">
+                    @endif
+                    <div x-show="openForm" x-transition class="mt-3">
+                        <form method="POST" action="{{ route('category.store') }}" class="space-y-4 px-2">
+                            @csrf
+
+                            <flux:field>
+                                <flux:label for="categoryTitle">category title</flux:label>
+                                <flux:input type="text" name="categoryTitle" id="categoryTitle" />
+                            </flux:field>
+
+                            <flux:field>
+                                <flux:label for="categoryDescription">category description</flux:label>
+                                <flux:input type="text" name="categoryDescription" id="categoryDescription" />
+                            </flux:field>
+
+                            <flux:button type="submit">MAKE</flux:button>
+                        </form>
+                    </div>
+
                     @forelse ($categories as $category)
-                        <flux:navlist.item :href="route('category.show', $category->id)">{{$category->categoryTitle}}<br>{{$category->categoryDescription}}</flux:navlist.item>
+                        <flux:navlist.item :href="route('category.show', $category->id)">
+                            <div class="text-white">{{$category->categoryTitle}}</div>
+                            <div class="text-[10px] mt-[4px]">{{$category->categoryDescription}}</div>
+                        </flux:navlist.item>
                     @empty
                         make a category
                     @endforelse

@@ -1,55 +1,50 @@
 <x-layouts.app>
-    <div class="grid grid-cols-2 gap-6 p-4">
-        <!-- LEFT -->
-        <div>
-            <h6 class="mb-2">NEW CATEGORY</h6>
-            <form method="POST" action="{{ route('category.store') }}" class="space-y-4">
-                @csrf
-
-                <flux:field>
-                    <flux:label for="categoryTitle">category title</flux:label>
-                    <flux:input type="text" name="categoryTitle" id="categoryTitle" />
-                </flux:field>
-
-                <flux:field>
-                    <flux:label for="categoryDescription">category description</flux:label>
-                    <flux:input type="text" name="categoryDescription" id="categoryDescription" />
-                </flux:field>
-
-                <flux:button type="submit">MAKE</flux:button>
-            </form>
-        </div>
-
         <!-- RIGHT -->
-        <div>
-            <h6 class="mb-2">LINK TASK TO CATEGORY</h6>
-            <form method="POST" action="{{ route('task.addTaskToCategory') }}" class="space-y-4">
-                @csrf
-
-                <flux:field>
-                    <flux:label for="categoryId">category</flux:label>
-                    <flux:select name="categoryId" id="categoryId">
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->categoryTitle }}</option>
-                        @endforeach
-                    </flux:select>
-                </flux:field>
-
-                <flux:field>
-                    <flux:label for="taskId">task</flux:label>
-                    <flux:select name="taskId" id="taskId">
-                        @foreach ($tasks as $task)
-                            <option value="{{ $task->id }}">{{ $task->title }}</option>
-                        @endforeach
-                    </flux:select>
-                </flux:field>
-
-                <flux:button type="submit">MAKE</flux:button>
-            </form>
+        <div class="pl-4">
+            <h6>Link task to category</h6>
+            @if (session('SuccesLinkTask'))
+                <div class="p-4 border border-green-400 bg-green-800 rounded-lg mt-1" role="alert">
+                    <h6 class="font-bold">{{ session('SuccesLinkTask') }}</h6>
+                </div>
+                <meta http-equiv="refresh" content="2;url={{ route('dashboard') }}">
+            @endif
         </div>
+        <form method="POST" action="{{ route('task.addTaskToCategory') }}" class="grid grid-cols-2 gap-6 p-4">
+            @csrf
+
+            <flux:field>
+                <flux:label for="categoryId">category</flux:label>
+                <flux:select name="categoryId" id="categoryId">
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->categoryTitle }}</option>
+                    @endforeach
+                </flux:select>
+            </flux:field>
+
+            <flux:field>
+                <flux:label for="taskId">task</flux:label>
+                <flux:select name="taskId" id="taskId">
+                    @foreach ($tasks as $task)
+                        <option value="{{ $task->id }}">{{ $task->title }}</option>
+                    @endforeach
+                </flux:select>
+            </flux:field>
+
+            <flux:button type="submit" class="col-span-2">MAKE</flux:button>
+        </form>
+
+
+
+    <div class="pl-4">
+        <h6>Make a new task.</h6>
+        @if (session('SuccessCreateTask'))
+            <div class="p-4 border border-green-400 bg-green-800 rounded-lg mt-1" role="alert">
+                <h6 class="font-bold">{{ session('SuccessCreateTask') }}</h6>
+            </div>
+            <meta http-equiv="refresh" content="2;url={{ route('dashboard') }}">
+        @endif
     </div>
 
-    <h6 class="pl-4">Make a new task.</h6>
     <form method="POST" action="{{ route('task.store') }}" class="grid grid-cols-2 gap-6 p-4">
         @csrf
 

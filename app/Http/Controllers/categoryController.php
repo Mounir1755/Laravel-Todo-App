@@ -46,7 +46,8 @@ class categoryController extends Controller
         
         $this->categoryModel->CreateNewCategory($data);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')
+                         ->with('SuccessCreateCategory', 'New category made!');
     }
 
     /**
