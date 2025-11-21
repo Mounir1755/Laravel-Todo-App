@@ -2,9 +2,9 @@
         <!-- RIGHT -->
         <div class="pl-4">
             <h6>Link task to category</h6>
-            @if (session('SuccesLinkTask'))
+            @if (session('Success'))
                 <div class="p-4 border border-green-400 bg-green-800 rounded-lg mt-1" role="alert">
-                    <h6 class="font-bold">{{ session('SuccesLinkTask') }}</h6>
+                    <h6 class="font-bold">{{ session('Success') }}</h6>
                 </div>
                 <meta http-equiv="refresh" content="2;url={{ route('dashboard') }}">
             @endif
@@ -37,12 +37,6 @@
 
     <div class="pl-4">
         <h6>Make a new task.</h6>
-        @if (session('SuccessCreateTask'))
-            <div class="p-4 border border-green-400 bg-green-800 rounded-lg mt-1" role="alert">
-                <h6 class="font-bold">{{ session('SuccessCreateTask') }}</h6>
-            </div>
-            <meta http-equiv="refresh" content="2;url={{ route('dashboard') }}">
-        @endif
     </div>
 
     <form method="POST" action="{{ route('task.store') }}" class="grid grid-cols-2 gap-6 p-4">

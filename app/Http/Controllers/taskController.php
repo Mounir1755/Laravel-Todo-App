@@ -80,7 +80,7 @@ class taskController extends Controller
         $this->taskModel->CreateNewTask($data);
         
         return redirect()->route('dashboard')
-                         ->with('SuccessCreateTask', 'New task made!');
+                         ->with('Success', 'New task made!');
     }
 
     /**
@@ -96,7 +96,7 @@ class taskController extends Controller
         $this->taskModel->AddTaskToCategory($data);
 
         return redirect()->route('dashboard')
-                         ->with('SuccesLinkTask', 'Task linked!');
+                         ->with('Success', 'Task linked!');
     }
 
     /**
@@ -131,7 +131,8 @@ class taskController extends Controller
 
         $this->taskModel->UpdateTask($id, $newData);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')
+                         ->with('Success', 'Task edited!');
     }
     
     /**
@@ -148,14 +149,16 @@ class taskController extends Controller
     {
         $this->taskModel->SoftDelete($id);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')
+                         ->with('Success', 'Task moved to taskbin!');
     }
 
     public function retreive($id)
     {
         $this->taskModel->RetreiveTask($id);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')
+                         ->with('Success', 'Task moved to dashboard!');
     }
 
     /**
