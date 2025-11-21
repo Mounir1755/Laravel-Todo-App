@@ -1,11 +1,12 @@
 <?php
 
+use Livewire\Volt\Volt;
+use Laravel\Fortify\Features;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\taskController;
+use App\Http\Controllers\teamController;
 use App\Http\Controllers\categoryController;
 use App\Http\Controllers\dashboardController;
-use App\Http\Controllers\taskController;
-use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
-use Livewire\Volt\Volt;
 
 Route::get('dashboard', [dashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -24,6 +25,10 @@ Route::get('trashbin', [taskController::class, 'trashbin'])->name('trashbin');
 
 
 Route::post('/task/addTaskToCategory',  [taskController::class, 'addTaskToCategory'])->name('task.addTaskToCategory');
+
+
+Route::get('/team', [teamController::class, 'index'])->name('teams');
+Route::get('/team/create', [teamController::class, 'create'])->name('team.create');
 
 
 Route::get('/category/{id}/show', [categoryController::class, 'show'])->name('category.show');

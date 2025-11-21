@@ -16,12 +16,23 @@
                 <flux:navlist.group :heading="__('Menu')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="trash" :href="route('trashbin')">Trashbin</flux:navlist.item>
-                    <flux:sidebar.group expandable icon="user-group" heading="Teams" class="grid">
-                        <flux:sidebar.item href="#">team</flux:sidebar.item>
-                        <flux:sidebar.item href="#">team</flux:sidebar.item>
-                        <flux:sidebar.item href="#">team</flux:sidebar.item>
-                    </flux:sidebar.group>
                 </flux:navlist.group>
+
+                <flux:navlist.group>
+                    <x-slot name="heading">
+                        <div class="flex items-center justify-between">
+                            <span>Teams</span>
+                            <a 
+                                class="text-xl text-grey-400"
+                                href="{{ route('team.create') }}"
+                            >
+                                +
+                            </a>
+                        </div>
+                    </x-slot>
+                    <flux:navlist.item icon="user-group" :href="route('teams')">My teams</flux:navlist.item>
+                </flux:navlist.group>
+
                 {{-- alpine is used for this --}}
                 <flux:navlist.group class="grid" x-data="{ openForm: false }">
                     <x-slot name="heading">
@@ -30,7 +41,7 @@
 
                             <button 
                                 @click="openForm = !openForm"
-                                class="text-xl text-grey-400"
+                                class="text-xl text-grey-400 cursor-pointer"
                             >
                                 +
                             </button>
