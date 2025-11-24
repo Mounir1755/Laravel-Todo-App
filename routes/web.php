@@ -28,7 +28,10 @@ Route::post('/task/addTaskToCategory',  [taskController::class, 'addTaskToCatego
 
 
 Route::get('/team', [teamController::class, 'index'])->name('teams');
+Route::get('/team/{id}/show', [teamController::class, 'show'])->name('team.show');
 Route::get('/team/create', [teamController::class, 'create'])->name('team.create');
+Route::get('/team/{id}/createTask', [teamController::class, 'createTask'])->name('team.createTask');
+Route::post('/team/storeTask', [teamController::class, 'storeTask'])->name('team.storeTask');
 Route::post('/team/store', [teamController::class, 'store'])->name('team.store');
 Route::get('/team/{id}/addUsersToTeam', [teamController::class, 'addUsersToTeam'])->name('team.addUsersToTeam');
 Route::post('/team/addUserToTeam', [teamController::class, 'addUserToTeam'])->name('team.addUserToTeam');

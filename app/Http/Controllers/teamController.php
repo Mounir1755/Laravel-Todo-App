@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\teamModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Volt\Exceptions\ReturnNewClassExecutionEndingException;
 
 class teamController extends Controller
 {
@@ -111,30 +112,47 @@ class teamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        //
+        $teamId = $request->route('id');
+        $tasks = $this->teamModel->GetAllTasks($teamId);
+        // dd($tasks);
+        return view('team.show', [
+             'title'  => 'make a new task'
+            ,'teamId' => $teamId
+            ,'tasks'  => $tasks
+        ]);
     }
 
     /**
      * Create a task
      */
-    public function AddTask(Request $request)
+    public function createTask(Request $request)
     {
-        $userId = Auth::id();
+        $teamId = $request->route('id');
+
+        return view('team.createTask', [
+            'teamId' => $teamId,
+            'title' => 'add tasks'
+        ]);
+    }
+
+        /**
+     * Create a task
+     */
+    public function storeTask(Request $request)
+    {
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string|max:255'
+            'teamId'        => 'required',
+            'title'         => 'required|string|max:255',
+            'description'   => 'required|string|max:255',
         ]);
 
-        $teamId = $this->teamModel->CreateNewTeam($data, $userId);
+        $userId = Auth::id();
 
-        return redirect()->route('team.addUsersToTeam', [
-            'teamId'      => $teamId,
-            'teamName'    => $data['title'],
-            'title'       => 'Invite team members.',
-            'description' => 'Invite team members now or skip and add them later.'
-        ]);
+        $this->teamModel->CreateNewTask($userId, $data);
+
+        return redirect()->back();
     }
 
     /**
