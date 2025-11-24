@@ -69,6 +69,7 @@ class teamController extends Controller
     public function addUsersToTeam(Request $request)
     {
         $teamId = $request->route('id');
+        
         return view('team.addUsersToTeam', [
             'teamId'      => $teamId,
             'title'       => 'Invite team members.',
@@ -91,6 +92,7 @@ class teamController extends Controller
         $teamId = $data['teamId'];
         $userAlreadyInTeam = $this->teamModel->CheckUserInTeam($teamId, $userId);
 
+        
         if($userAlreadyInTeam) {
             return redirect()->back()->with([
                 'error' => 'this user is already invited to the team!'
@@ -111,9 +113,19 @@ class teamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($teamId)
     {
-        //
+        $teamTasks = $this->teamModel->GetTeamTasks($teamId);
+        $teamInfo = $this->teamModel->GetTeamTasks($teamId);
+
+        $teamName = $teamInfo[0]->teamName;
+        $teamDescription = $teamInfo[0]->teamDescription;
+
+        return view('team.show', [
+            'teamTasks' => $teamTasks,
+            'teamName' => $teamName,
+            'teamDescription' => $teamDescription
+        ]);
     }
 
     /**

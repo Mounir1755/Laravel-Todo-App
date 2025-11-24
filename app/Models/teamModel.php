@@ -62,4 +62,24 @@ class teamModel extends Model
 
         return $result;
     }
+
+    public function GetTeamTasks($teamId) {
+        $result = DB::table('team_task as tts')
+            ->join('teams as t', 'tts.teamId', '=', 't.id')
+            ->join('users as u', 'tts.userId', '=', 'u.id')
+            ->where('tts.teamId', $teamId)
+            ->select(
+                 't.title         as teamName'
+                ,'t.description   as teamDescription'
+                ,'tts.id'
+                ,'tts.title       as taskTitle'
+                ,'tts.description as taskDescription'
+                ,'tts.done'
+                ,'tts.isActive'
+                
+            )
+            ->get();
+
+        return $result;
+    }
 }
