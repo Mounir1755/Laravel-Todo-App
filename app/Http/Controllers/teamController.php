@@ -24,10 +24,11 @@ class teamController extends Controller
         $userId = Auth::id();
         $teams = $this->teamModel->GetAllTeams($userId);
 
-        dd($teams);
+        // dd($teams);
 
         return view('team.index', [
-            'title' => 'teams'
+            'title' => 'your teams',
+            'teams' => $teams
         ]);
     }
 
@@ -52,13 +53,59 @@ class teamController extends Controller
             'description' => 'nullable|string|max:255'
         ]);
 
-        $this->teamModel->CreateNewTeam($data, $userId);
+        $teamId = $this->teamModel->CreateNewTeam($data, $userId);
 
-        return view('team.inviteUsersToTeam', [
+        return redirect()->route('team.addUsersToTeam', [
+            'teamId'      => $teamId,
             'teamName'    => $data['title'],
             'title'       => 'Invite team members.',
             'description' => 'Invite team members now or skip and add them later.'
         ]);
+    }
+    
+    /**
+     * Show the form for adding users to a team
+     */
+    public function addUsersToTeam(Request $request)
+    {
+        $teamId = $request->route('id');
+        return view('team.addUsersToTeam', [
+            'teamId'      => $teamId,
+            'title'       => 'Invite team members.',
+            'description' => 'Invite team members now or skip and add them later.'
+        ]);
+    }
+
+    /**
+     * Show the form for adding users to a team
+     */
+    public function addUserToTeam(Request $request)
+    {
+        $data = $request->validate([
+            'email'  => 'required|string|max:255',
+            'teamId' => 'required'
+        ]);
+
+        $userId = $this->teamModel->CheckUserEmail($data);
+
+        $teamId = $data['teamId'];
+        $userAlreadyInTeam = $this->teamModel->CheckUserInTeam($teamId, $userId);
+
+        if($userAlreadyInTeam) {
+            return redirect()->back()->with([
+                'error' => 'this user is already invited to the team!'
+            ]);
+        }
+
+        if(!$userId) {
+            return redirect()->back()->with([
+                'error' => 'this user is not registerd!'
+            ]);
+        }
+
+        $this->teamModel->AddUsersToTeam($teamId, $userId);
+
+        return redirect('team');
     }
 
     /**
@@ -68,6 +115,7 @@ class teamController extends Controller
     {
         //
     }
+
 
     /**
      * Show the form for editing the specified resource.

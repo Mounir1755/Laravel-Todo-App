@@ -20,15 +20,31 @@ class teamModel extends Model
                 'userId'    => $userId
             ]);
 
-            // return $teamId;
+            return $teamId;
         });
     }
 
+    public function CheckUserEmail($data) {
+        $result = DB::table('users')
+            ->where('email', '=', $data['email'])
+            ->value('id');
 
-    public function LinkUserToTeam($teamId, $userId) {
+        return $result;
+    }
+    
+    public function CheckUserInTeam($teamId, $userId) {
+        $result = DB::table('team_user')
+            ->where('teamId', '=', $teamId)
+            ->where('userId', '=', $userId)
+            ->first();
+
+        return $result;
+    }
+
+    public function AddUsersToTeam($teamId, $userId) {
         DB::table('team_user')->insert([
-             'teamId'   => $teamId
-            ,'userId'   => $userId
+            'teamId'    => $teamId,
+            'userId'    => $userId
         ]);
     }
 
@@ -38,11 +54,12 @@ class teamModel extends Model
             ->join('users as u', 'tu.userId', '=', 'u.id')
             ->where('tu.userId', $userId)
             ->select(
+                't.id',
                 't.title',
                 't.description'
             )
             ->get();
-            
+
         return $result;
     }
 }
