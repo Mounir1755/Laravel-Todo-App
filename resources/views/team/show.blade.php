@@ -64,5 +64,4 @@
             <p>Niks gevonden :(</p>
         @endforelse
     </div>
-
 </x-layouts.app>
