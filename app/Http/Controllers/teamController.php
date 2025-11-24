@@ -116,6 +116,26 @@ class teamController extends Controller
         //
     }
 
+    /**
+     * Create a task
+     */
+    public function AddTask(Request $request)
+    {
+        $userId = Auth::id();
+        $data = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string|max:255'
+        ]);
+
+        $teamId = $this->teamModel->CreateNewTeam($data, $userId);
+
+        return redirect()->route('team.addUsersToTeam', [
+            'teamId'      => $teamId,
+            'teamName'    => $data['title'],
+            'title'       => 'Invite team members.',
+            'description' => 'Invite team members now or skip and add them later.'
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.

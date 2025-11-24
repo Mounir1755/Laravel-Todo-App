@@ -20,7 +20,7 @@
         </flux:field>
 
         <flux:button type="submit">
-            MAKE
+            Add
         </flux:button>
     </form>
 </x-layouts.app>
