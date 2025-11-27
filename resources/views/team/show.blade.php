@@ -1,11 +1,26 @@
 <x-layouts.app>
-    {{ $title }}
-    <br>
-    <a href="{{ route('team.createTask', $teamId) }}">
-        make a new task
-    </a>
-    <br>
-    <div class="overflow-y-auto p-4" style="max-height: 70vh;">
+    <div class="ps-4">
+        <h1 class="text-xl font-bold">{{ $title }}</h1>
+        <p>Members:</p>
+        <div class="text-sm font-normal">
+            <div class="flex items-center text-start text-sm">
+                <span class="relative flex max-w-100 w-fit shrink-0 overflow-hidden rounded-lg">
+                    @forelse ($teamMemberInitials as $initials)
+                        <div class="shadow-xl flex min-h-8 max-h-8 min-w-8 max-w-8 p-3 ms-1 items-center uppercase justify-center rounded-lg border-[0.3px] border-gray-400 bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                            {{ $initials }}
+                        </div>
+                    @empty
+                        {{-- fix : exclude your own initials --}}
+                        No members yet!
+                    @endforelse
+                </span>
+            </div>
+        </div>
+        <a href="{{ route('team.createTask', $teamId) }}">
+            make a new task
+        </a>   
+    </div>
+    <div class="overflow-y-auto p-4" style="max-height: 80vh;">
         @forelse ( $tasks as $task )
             @if ( $task->isActive === 1)
                 <div class="border border-sky-950 rounded-lg mb-3 grid grid-cols-2 gap-6 p-2 shadow-xl">

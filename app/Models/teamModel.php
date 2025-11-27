@@ -48,6 +48,17 @@ class teamModel extends Model
         ]);
     }
 
+    public function GetAllTeammembers($teamId)
+    {
+        $members = DB::table('team_user as tu')
+            ->join('teams as t', 'tu.teamId', '=', 't.id')
+            ->join('users as u', 'tu.userId', '=', 'u.id')
+            ->where('tu.teamId', $teamId)
+            ->pluck('u.name');
+
+        return $members;
+    }
+
     public function GetAllTeams($userId) {
         $result = DB::table('team_user as tu')
             ->join('teams as t', 'tu.teamId', '=', 't.id')
@@ -64,7 +75,7 @@ class teamModel extends Model
     }
 
     public function GetAllTasks($teamId) {
-        $result = DB::table('team_task as tts')
+        return DB::table('team_task as tts')
             ->join('teams as t', 'tts.teamId', '=', 't.id')
             ->join('users as u', 'tts.userId', '=', 'u.id')
             ->where('tts.teamId', $teamId)
@@ -76,8 +87,15 @@ class teamModel extends Model
                 ,'tts.isActive'
             )
             ->get();
-        return $result;
     }
+
+    public function GetTeamName($teamId)
+    {
+        return DB::table('teams')
+            ->where('id', $teamId)
+            ->value('title');
+    }
+
 
     public function CreateNewTask($userId, $data) {
         DB::table('team_task')->insert([

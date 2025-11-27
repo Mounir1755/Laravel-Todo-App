@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\teamModel;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Volt\Exceptions\ReturnNewClassExecutionEndingException;
@@ -70,7 +71,7 @@ class teamController extends Controller
     public function addUsersToTeam(Request $request)
     {
         $teamId = $request->route('id');
-        
+
         return view('team.addUsersToTeam', [
             'teamId'      => $teamId,
             'title'       => 'Invite team members.',
@@ -93,7 +94,6 @@ class teamController extends Controller
         $teamId = $data['teamId'];
         $userAlreadyInTeam = $this->teamModel->CheckUserInTeam($teamId, $userId);
 
-        
         if($userAlreadyInTeam) {
             return redirect()->back()->with([
                 'error' => 'this user is already invited to the team!'
@@ -118,11 +118,26 @@ class teamController extends Controller
     {
         $teamId = $request->route('id');
         $tasks = $this->teamModel->GetAllTasks($teamId);
-        // dd($tasks);
+
+        $teamName = $this->teamModel->GetTeamName($teamId);
+        $members = $this->teamModel->GetAllTeammembers($teamId);
+        
+        $allInitials = [];
+        foreach ($members as $member) {
+            // This is all laravels I just tweaked it to my needs :)
+            $initials = Str::of($member)
+                            ->explode(' ')
+                            ->take(2)
+                            ->map(fn ($word) => Str::substr($word, 0, 1))
+                            ->implode('');
+            $allInitials[] = $initials;
+        }
+        
         return view('team.show', [
-             'title'  => 'make a new task'
-            ,'teamId' => $teamId
-            ,'tasks'  => $tasks
+             'title'              => $teamName
+            ,'teamId'             => $teamId
+            ,'teamMemberInitials' => $allInitials
+            ,'tasks'              => $tasks
         ]);
     }
 

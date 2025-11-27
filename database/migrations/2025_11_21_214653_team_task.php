@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('teamId')->references('id')->on('teams');
             $table->foreignId('userId')->references('id')->on('users');
+            $table->foreignId('assingedTo')->references('id')->on('users');
             $table->string('title')->nullable(false);
             $table->string('description')->nullable(true);
             $table->boolean('done')->default(0);
