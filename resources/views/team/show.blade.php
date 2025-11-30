@@ -1,10 +1,10 @@
 <x-layouts.app>
     <div class="ps-4">
-        <h1 class="text-xl font-bold">{{ $title }}</h1>
-        <p>Members:</p>
+        <h1 class="text-xl font-bold ms-1">{{ $title }}</h1>
+        <p class="ms-1 mb-3">Members:</p>
         <div class="text-sm font-normal">
             <div class="flex items-center text-start text-sm">
-                <span class="relative flex max-w-100 w-fit shrink-0 overflow-hidden rounded-lg">
+                <span class="relative flex max-w-100 w-fit shrink-0 overflow-hidden rounded-lg mb-3">
                     @forelse ($teamMemberInitials as $initials)
                         <div class="shadow-xl flex min-h-8 max-h-8 min-w-8 max-w-8 p-3 ms-1 items-center uppercase justify-center rounded-lg border-[0.3px] border-gray-400 bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                             {{ $initials }}
@@ -28,7 +28,7 @@
                         <h5 class="{{ $task->done ? ' tracking-wide font-bold decoration-wavy line-through decoration-red-600 decoration-1' : ' tracking-wide font-bold' }}">Task: {{ $task->taskTitle }}</h5>
                         <p class="text-xs text-gray-400">Description: {{ $task->taskDescription }}</p>
                         <div class="flex items-center gap-3">
-                            <a href="{{ route('task.edit', $task->id)}}">
+                            <a href="{{ route('team.editTask', ['teamId' => $teamId, 'id' => $task->id])}}">
                                 <i class="bi bi-pen cursor-pointer"></i>
                             </a>
 
@@ -61,12 +61,16 @@
                         </div>
                     </div>
                     <div class="ms-auto content-center">
+                        <div>
+                            <div class="text-sm">Assigned to:</div>
+                            <div>{{ $task->assignedTo }}</div>
+                        </div>
                         @if ( $task->done == 0 )
-                            <div class="border border-red-900 rounded-full text-xs p-1 bg-red-800 font-bold shadow-lg">
+                            <div class="border border-red-900 rounded-full text-xs p-1 bg-red-800 font-bold shadow-lg text-center">
                                 To-do
                             </div>
                         @else
-                            <div class="border border-green-900 rounded-full text-xs p-1 bg-green-800 font-bold shadow-lg">
+                            <div class="border border-green-900 rounded-full text-xs p-1 bg-green-800 font-bold shadow-lg text-center">
                                 Done
                             </div>
                         @endif                             

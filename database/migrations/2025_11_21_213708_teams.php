@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('ownerId')->references('id')->on('users');
             $table->string('title')->nullable(false);
             $table->string('description')->nullable(true);
             $table->boolean('isActive')->default(1);

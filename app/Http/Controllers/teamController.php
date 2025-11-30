@@ -120,7 +120,7 @@ class teamController extends Controller
         $tasks = $this->teamModel->GetAllTasks($teamId);
 
         $teamName = $this->teamModel->GetTeamName($teamId);
-        $members = $this->teamModel->GetAllTeammembers($teamId);
+        $members = $this->teamModel->GetAllTeamMembersPluck($teamId);
         
         $allInitials = [];
         foreach ($members as $member) {
@@ -175,17 +175,40 @@ class teamController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function editTask(Request $request)
     {
-        //
+        $taskId = $request->route('id');
+        $teamId = $request->route('teamId');
+
+        $teamMembers = $this->teamModel->GetAllTeamMembersSelect($teamId);
+        $oldData     = $this->teamModel->GetTaskById($taskId);
+
+        // dd($teamMembers);
+
+        return view('team.editTask', [
+            'taskId' => $taskId,
+            'title' => 'add tasks',
+            'teamMembers' => $teamMembers,
+            'oldData' => $oldData
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateTask(Request $request)
     {
-        //
+        $data = $request->validate([
+            'taskId'        => 'required',
+            'title'         => 'required|string|max:255',
+            'description'   => 'required|string|max:255',
+            'assignedTo'    => 'nullable'
+        ]);
+
+        $taskId = $data['taskId'];
+        $this->teamModel->UpdateTask($data, $taskId);
+
+        return redirect()->back();
     }
 
     /**

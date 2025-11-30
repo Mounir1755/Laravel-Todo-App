@@ -11,6 +11,7 @@ class teamModel extends Model
     {
         DB::transaction(function () use ($data, $userId) {
             $teamId = DB::table('teams')->insertGetId([
+                'ownerId'     => $userId,
                 'title'       => $data['title'],
                 'description' => $data['description']
             ]);
@@ -48,13 +49,28 @@ class teamModel extends Model
         ]);
     }
 
-    public function GetAllTeammembers($teamId)
+    public function GetAllTeamMembersPluck($teamId)
     {
         $members = DB::table('team_user as tu')
             ->join('teams as t', 'tu.teamId', '=', 't.id')
             ->join('users as u', 'tu.userId', '=', 'u.id')
             ->where('tu.teamId', $teamId)
             ->pluck('u.name');
+
+        return $members;
+    }
+
+    public function GetAllTeamMembersSelect($teamId)
+    {
+        $members = DB::table('team_user as tu')
+            ->join('teams as t', 'tu.teamId', '=', 't.id')
+            ->join('users as u', 'tu.userId', '=', 'u.id')
+            ->where('tu.teamId', $teamId)
+            ->select(
+                 'u.name'
+                ,'u.id as userId'
+            )
+            ->get();
 
         return $members;
     }
@@ -76,11 +92,13 @@ class teamModel extends Model
 
     public function GetAllTasks($teamId) {
         return DB::table('team_task as tts')
-            ->join('teams as t', 'tts.teamId', '=', 't.id')
-            ->join('users as u', 'tts.userId', '=', 'u.id')
+            ->join('teams as t',  'tts.teamId', '=', 't.id')
+            ->join('users as u',  'tts.userId', '=', 'u.id')
+            ->join('users as at', 'tts.assignedTo', '=', 'at.id')
             ->where('tts.teamId', $teamId)
             ->select(
                  'tts.id'
+                ,'at.name         as assignedTo'
                 ,'tts.title       as taskTitle'
                 ,'tts.description as taskDescription'
                 ,'tts.done'
@@ -89,6 +107,21 @@ class teamModel extends Model
             ->get();
     }
 
+    public function GetTaskById($Id) {
+        return DB::table('team_task as tts')
+            ->join('users as u',  'tts.userId',     '=', 'u.id')
+            ->join('users as at', 'tts.assignedTo', '=', 'at.id')
+            ->select(
+                'tts.id',
+                'at.name as assignedTo',
+                'tts.title as taskTitle',
+                'tts.description as taskDescription'
+            )
+            ->where('tts.id', $Id)
+            ->first();
+    }
+
+
     public function GetTeamName($teamId)
     {
         return DB::table('teams')
@@ -96,13 +129,25 @@ class teamModel extends Model
             ->value('title');
     }
 
-
     public function CreateNewTask($userId, $data) {
         DB::table('team_task')->insert([
             'teamId'      => $data['teamId'],
             'userId'      => $userId,
+            'assignedTo'  => $userId,  
             'title'       => $data['title'],
             'description' => $data['description']
         ]);
     }
+
+    public function UpdateTask($data, $taskId) {
+        DB::table('team_task')
+            ->where('id', $taskId)
+            ->update(
+                [
+                     'title' => $data['title']
+                    ,'description' => $data['description']
+                    ,'assignedTo' => $data['assignedTo']
+                ]
+            );
+    } 
 }

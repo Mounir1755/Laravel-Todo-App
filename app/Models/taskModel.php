@@ -10,17 +10,38 @@ class taskModel extends Model
 {
     public function GetAllTasksById($userId) {
         $result = DB::table('tasks')
-                        ->get()
-                        ->where('userId', '=', $userId);
+                    ->get()
+                    ->where('userId', '=', $userId);
 
         return $result;
     }
 
+    public function GetTasksCountById($userId)
+    {
+        $teamTasks = DB::table('team_task')
+            ->leftJoin('users as u', 'team_task.assignedTo', '=', 'u.id')
+            ->where('team_task.assignedTo', $userId)
+            ->select(
+                'team_task.id as taskId'
+            );
+
+        $normalTasks = DB::table('tasks')
+            ->leftJoin('users as u2', 'tasks.userId', '=', 'u2.id')
+            ->where('tasks.userId', $userId)
+            ->select(
+                'tasks.id as taskId'
+            );
+
+        return $teamTasks->unionAll($normalTasks) // <- unionAll merges results from 2 into 1
+                         ->count(); // <- counts amount of results
+    }
+
+
     public function GetTaskInfoById($id) {
         $result = DB::table('tasks')
-                        ->get()
-                        ->where('id', '=', $id)
-                        ->first();
+                    ->get()
+                    ->where('id', '=', $id)
+                    ->first();
 
         return $result;
     }

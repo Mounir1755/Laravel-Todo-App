@@ -32,6 +32,8 @@ Route::get('/team/{id}/show', [teamController::class, 'show'])->name('team.show'
 Route::get('/team/create', [teamController::class, 'create'])->name('team.create');
 Route::get('/team/{id}/createTask', [teamController::class, 'createTask'])->name('team.createTask');
 Route::post('/team/storeTask', [teamController::class, 'storeTask'])->name('team.storeTask');
+Route::get('/team/{teamId}/task/{id}', [teamController::class, 'editTask'])->name('team.editTask');
+Route::put('/team', [teamController::class, 'updateTask'])->name('team.updateTask');
 Route::post('/team/store', [teamController::class, 'store'])->name('team.store');
 Route::get('/team/{id}/addUsersToTeam', [teamController::class, 'addUsersToTeam'])->name('team.addUsersToTeam');
 Route::post('/team/addUserToTeam', [teamController::class, 'addUserToTeam'])->name('team.addUserToTeam');
