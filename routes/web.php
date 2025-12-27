@@ -21,6 +21,13 @@ Route::put('/trashbin/{id}/retreive', [taskController::class, 'retreive'])->name
 Route::put('/task/{id}/softdelete', [taskController::class, 'softdelete'])->name('task.softdelete');
 Route::get('trashbin', [taskController::class, 'trashbin'])->name('trashbin');
 
+use Illuminate\Support\Facades\DB;
+
+Route::get('/db-test', function () {
+    return DB::connection()->getPdo()
+        ? 'Railway DB connected ✅'
+        : 'Railway DB failed ❌';
+});
 
 
 Route::post('/task/addTaskToCategory',  [taskController::class, 'addTaskToCategory'])->name('task.addTaskToCategory');
