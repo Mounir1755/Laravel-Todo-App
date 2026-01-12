@@ -36,7 +36,6 @@ class taskModel extends Model
                          ->count(); // <- counts amount of results
     }
 
-
     public function GetTaskInfoById($id) {
         $result = DB::table('tasks')
                     ->get()
@@ -98,7 +97,7 @@ class taskModel extends Model
                 ->where('id', $id)
                 ->update(['done' => 0]);
         } else {
-            return 'babash';
+            return 'Er is iets fout gegaan.';
         }
     }
 
