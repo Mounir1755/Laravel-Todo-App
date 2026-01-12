@@ -2,7 +2,7 @@
         <!-- RIGHT -->
         <div class="pl-4">
             @if (session('Success'))
-                <div class="p-4 border border-green-400 bg-green-800 rounded-lg mt-1" role="alert">
+                <div class="p-4 border border-green-600 bg-green-950/50 rounded-lg mt-1 shadow-xl mb-5" role="alert">
                     <h6 class="font-bold">{{ session('Success') }}</h6>
                 </div>
                 <meta http-equiv="refresh" content="2;url={{ route('dashboard') }}">

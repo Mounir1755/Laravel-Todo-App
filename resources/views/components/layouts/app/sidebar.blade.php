@@ -49,7 +49,7 @@
                     </x-slot>
 
                     @if (session('SuccessCreateCategory'))
-                        <div class="p-1 border border-green-400 bg-green-800 rounded-lg mt-1" role="alert">
+                        <div class="p-1 border border-green-600 bg-green-950/50 rounded-lg mt-1" role="alert">
                             <h6 class="font-bold">{{ session('SuccessCreateCategory') }}</h6>
                         </div>
                         <meta http-equiv="refresh" content="2;url={{ route('dashboard') }}">
