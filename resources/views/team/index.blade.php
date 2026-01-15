@@ -1,7 +1,7 @@
 <x-layouts.app>
     {{ $title }}
     @forelse ($teams as $team) 
-        <div class="border border-sky-950 rounded-lg mb-3 grid grid-cols-2 gap-6 p-2 shadow-xl"> 
+        <div class="border border-white rounded-lg mb-3 grid grid-cols-2 gap-6 p-2 shadow-xl"> 
             <div>
                 <a href="{{ route('team.show', $team->id) }}">
                     <h6>{{$team->title}}</h6>

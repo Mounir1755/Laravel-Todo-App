@@ -39,7 +39,7 @@ class categoryController extends Controller
     {
         $data = $request->validate([
             'categoryTitle' => 'required|string',
-            'categoryDescription' => 'required|string'
+            'categoryDescription' => 'nullable|string'
         ]);
 
         $data['userId'] = Auth::id();

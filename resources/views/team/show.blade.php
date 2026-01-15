@@ -23,7 +23,7 @@
     <div class="overflow-y-auto p-4" style="max-height: 80vh;">
         @forelse ( $tasks as $task )
             @if ( $task->isActive === 1)
-                <div class="border border-sky-950 rounded-lg mb-3 grid grid-cols-2 gap-6 p-2 shadow-xl">
+                <div class="border border-white rounded-lg mb-3 grid grid-cols-2 gap-6 p-2 shadow-xl">
                     <div>
                         <h5 class="{{ $task->done ? ' tracking-wide font-bold decoration-wavy line-through decoration-red-600 decoration-1' : ' tracking-wide font-bold' }}">Task: {{ $task->taskTitle }}</h5>
                         <p class="text-xs text-gray-400">Description: {{ $task->taskDescription }}</p>
@@ -44,7 +44,7 @@
                                 </button>
                             </form>
 
-                            <form action="{{ route('task.done', $task->id )}}" method="POST">
+                            <form action="{{ route('team.done', $task->id )}}" method="POST">
                                 @csrf
                                 @method('PUT')
 
@@ -61,19 +61,15 @@
                         </div>
                     </div>
                     <div class="ms-auto content-center">
+                        @if ( $task->done == 0 )
+                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-red-100 text-red-800 justify-center dark:bg-red-800/30 dark:text-red-500 w-20">ToDo</span>
+                        @else
+                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-teal-100 text-teal-800 justify-center dark:bg-teal-800/30 dark:text-teal-500 w-20">Done</span>
+                        @endif    
                         <div>
                             <div class="text-sm">Assigned to:</div>
                             <div>{{ $task->assignedTo }}</div>
-                        </div>
-                        @if ( $task->done == 0 )
-                            <div class="border border-red-900 rounded-full text-xs p-1 bg-red-800 font-bold shadow-lg text-center">
-                                To-do
-                            </div>
-                        @else
-                            <div class="border border-green-900 rounded-full text-xs p-1 bg-green-800 font-bold shadow-lg text-center">
-                                Done
-                            </div>
-                        @endif                             
+                        </div>                            
                     </div>
                 </div>
             @else

@@ -154,7 +154,7 @@ class teamController extends Controller
         ]);
     }
 
-        /**
+    /**
      * Create a task
      */
     public function storeTask(Request $request)
@@ -162,12 +162,22 @@ class teamController extends Controller
         $data = $request->validate([
             'teamId'        => 'required',
             'title'         => 'required|string|max:255',
-            'description'   => 'required|string|max:255',
+            'description'   => 'nullable|string|max:255',
         ]);
 
         $userId = Auth::id();
 
         $this->teamModel->CreateNewTask($userId, $data);
+
+        return redirect()->back();
+    }
+
+    /**
+     * Mark task as done.
+     */
+    public function done($id) 
+    {
+        $this->teamModel->MarkAsDone($id);
 
         return redirect()->back();
     }

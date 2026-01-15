@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\taskModel;
 use Illuminate\Http\Request;
+use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
@@ -29,6 +30,13 @@ class taskController extends Controller
         return view('dashboard', [
             'tasks' => $tasks
         ]);
+    }
+
+    public function APIGetTasks()
+    {
+        $tasks = $this->taskModel->GetAllTasksById(Auth::Id());
+        // dd($tasks);
+        return response()->json($tasks);
     }
 
     public function trashbin()
@@ -68,7 +76,7 @@ class taskController extends Controller
         $data = $request->validate([
             'categoryId'  => 'nullable',
             'title'       => 'required|string',
-            'description' => 'required|string'
+            'description' => 'nullable|string'
         ]);
 
         $data['userId'] = Auth::id();
@@ -126,7 +134,7 @@ class taskController extends Controller
     {
         $newData = $request->validate([
              'title'        => 'required|string'
-            ,'description'  => 'required|string'
+            ,'description'  => 'nullable|string'
         ]);
 
         $this->taskModel->UpdateTask($id, $newData);

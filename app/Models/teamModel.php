@@ -139,6 +139,25 @@ class teamModel extends Model
         ]);
     }
 
+    public function MarkAsDone($id)
+    {
+        $checkIfDone = DB::table('team_task')
+                            ->where('id', $id)
+                            ->value('done'); // < pakt alleen de waarde niet de hele kolom
+
+        if ($checkIfDone == 0) {
+            DB::table('team_task')
+                ->where('id', $id)
+                ->update(['done' => 1]);
+        } elseif ($checkIfDone == 1) {
+            DB::table('team_task')
+                ->where('id', $id)
+                ->update(['done' => 0]);
+        } else {
+            return 'Er is iets fout gegaan.';
+        }
+    }
+
     public function UpdateTask($data, $taskId) {
         DB::table('team_task')
             ->where('id', $taskId)

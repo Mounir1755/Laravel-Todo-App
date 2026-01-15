@@ -7,6 +7,7 @@ use App\Http\Controllers\taskController;
 use App\Http\Controllers\teamController;
 use App\Http\Controllers\categoryController;
 use App\Http\Controllers\dashboardController;
+use Illuminate\Console\View\Components\Task;
 
 Route::get('dashboard', [dashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -16,6 +17,8 @@ Route::post('/task/store', [taskController::class, 'store'])->name('task.store')
 Route::put('/task/{id}/done', [taskController::class, 'done'])->name('task.done');
 Route::get('/task/{id}/edit', [taskController::class, 'edit'])->name('task.edit');
 Route::put('/task/{id}/update', [taskController::class, 'update'])->name('task.update');
+Route::get('/api/tasks', [taskController::class, 'APIGetTasks']);
+
 
 Route::delete('/trashbin/{id}', [taskController::class, 'destroy'])->name('trashbin.destroy');
 Route::put('/trashbin/{id}/retreive', [taskController::class, 'retreive'])->name('trashbin.retreive');
@@ -24,12 +27,12 @@ Route::get('trashbin', [taskController::class, 'trashbin'])->name('trashbin');
 
 Route::post('/task/addTaskToCategory',  [taskController::class, 'addTaskToCategory'])->name('task.addTaskToCategory');
 
-
 Route::get('/team', [teamController::class, 'index'])->name('teams');
 Route::get('/team/{id}/show', [teamController::class, 'show'])->name('team.show');
 Route::get('/team/create', [teamController::class, 'create'])->name('team.create');
 Route::get('/team/{id}/createTask', [teamController::class, 'createTask'])->name('team.createTask');
 Route::post('/team/storeTask', [teamController::class, 'storeTask'])->name('team.storeTask');
+Route::put('/team/{id}/done', [teamController::class, 'done'])->name('team.done');
 Route::get('/team/{teamId}/task/{id}', [teamController::class, 'editTask'])->name('team.editTask');
 Route::put('/team', [teamController::class, 'updateTask'])->name('team.updateTask');
 Route::post('/team/store', [teamController::class, 'store'])->name('team.store');

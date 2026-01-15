@@ -133,13 +133,9 @@
                     </div>
                     <div class="ms-auto content-center">
                         @if ( $task->done == 0 )
-                            <div class="border border-red-900 rounded-full text-xs p-1 bg-red-800 font-bold shadow-lg">
-                                To-do
-                            </div>
+                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full border-[0.5px] border-red-400 text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800/30 dark:text-red-500">ToDo</span>
                         @else
-                            <div class="border border-green-900 rounded-full text-xs p-1 bg-green-800 font-bold shadow-lg">
-                                Done
-                            </div>
+                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full border-[0.5px] border-green-400 text-xs font-medium bg-teal-100 text-teal-800 dark:bg-teal-800/30 dark:text-teal-500">Done</span>
                         @endif                             
                     </div>
                 </div>
